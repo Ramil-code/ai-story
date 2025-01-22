@@ -78,27 +78,22 @@ Ensure you have the following installed and configured:
 
 ### Step 2: Deploy the Frontend
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd ../frontend
-   ```
-
-2. Install dependencies:
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-3. Update the `REPLACE BY YOUR API` line in [`AudioGenerator.txs`](https://github.com/Ramil-code/ai-story/blob/main/src/components/AudioGenerator.tsx) with endpoint link from Step 1.3
+2. Update the `REPLACE BY YOUR API` line in [`AudioGenerator.txs`](https://github.com/Ramil-code/ai-story/blob/main/src/components/AudioGenerator.tsx) with endpoint link from Step 1.3
 
-4. Run the frontend locally:
+3. Run the frontend locally:
    ```bash
    npm run dev
    ```
-5. AWS SAM creates an S3 bucket named `{AWS::StackName}-audio-files`. Update the deployed Lambda code to reference this bucket.
+4. AWS SAM creates an S3 bucket named `{AWS::StackName}-audio-files`. Update the deployed Lambda code to reference this bucket.
    
-7. Go to the S3 console, open the created bucket, enable static website hosting, and configure [access policies](https://github.com/Ramil-code/ai-story/blob/main/s3_policy) to allow public access.
+5. Go to the S3 console, open the created bucket, enable static website hosting, and configure [access policies](https://github.com/Ramil-code/ai-story/blob/main/s3_policy) to allow public access.
    
-9. After Step 2.4, a folder named "dist" will appear in the project directory. Upload its contents to the S3 bucket and retrieve the public URL of the project from the bucket properties.
+6. After Step 2.3, a folder named "dist" will appear in the project directory. Upload its contents to the S3 bucket and retrieve the public URL of the project from the bucket properties.
 
 ---
 
