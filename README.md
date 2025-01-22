@@ -1,117 +1,50 @@
-# AI Story-Based Time Filler
+# React + TypeScript + Vite
 
-AI Story-Based Time Filler is a web application that generates audio files based on user-provided text prompts. It leverages AWS services such as Lambda, S3, Polly, and Bedrock to create and store audio files.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/1f941e16-abfc-48e0-93db-bf925c50439e" alt="Screenshot 2025-01-21 at 3 51 21 PM">
-</p>
+Currently, two official plugins are available:
 
-## Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- **React Frontend:** Built with Vite and Tailwind CSS.
-- **Serverless Backend:** AWS Lambda, S3, Polly, Bedrock, and HTTP API Gateway.
-- **Infrastructure-as-Code:** Managed with AWS SAM.
-- **CORS Enabled:** Open access to the API from any frontend.
+## Expanding the ESLint configuration
 
-## Prerequisites
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-Ensure you have the following installed and configured:
+- Configure the top-level `parserOptions` property like this:
 
-1. **AWS CLI** (configured with access keys):  
-   [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-   ```bash
-   aws configure
-   ```
+```js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-2. **AWS SAM CLI:**  
-   [Install SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
-   ```bash
-   sam --version
-   ```
+- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
+- Optionally add `...tseslint.configs.stylisticTypeChecked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-3. **Node.js and npm:**  
-   [Install Node.js](https://nodejs.org/)
-   ```bash
-   node -v
-   npm -v
-   ```
+```js
+// eslint.config.js
+import react from 'eslint-plugin-react'
 
----
-
-## Deployment Steps
-
-### Step 1: Deploy the Backend
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Ramil-code/ai-story
-   ```
-3. Upload the Lambda ZIP file to an S3 bucket:
-   ```bash
-   aws s3 cp app.py.zip s3://your-bucket-name/app.py.zip
-   ```
-4. Update the `CodeUri` line in `template.yaml` to reflect the new S3 location:
-   ```yaml
-   CodeUri: s3://your-bucket-name/app.py.zip
-   ```
-
-2. Build and deploy the backend:
-   ```bash
-   sam build
-   sam deploy --guided
-   ```
-
-3. After deployment, note the generated API Gateway URL:
-   ```
-   Outputs:
-   ApiUrl - https://xyz123.execute-api.us-east-1.amazonaws.com/Prod/generate
-   ```
-
-4. Test the API:
-   ```bash
-   curl -X POST https://xyz123.execute-api.us-east-1.amazonaws.com/Prod/generate \
-        -H "Content-Type: application/json" \
-        -d '{"prompt": "Tell me a story", "desiredDuration": 60}'
-   ```
-
----
-
-### Step 2: Deploy the Frontend
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd ../frontend
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Update the `REPLACE BY YOUR API` line in `AudioGenerator.txs` with endpoint link (Step 1.3)
-
-4. Run the frontend locally:
-   ```bash
-   npm run dev
-   ```
-5. AWS SAM creates an S3 bucket named `{AWS::StackName}-audio-files`. Update the deployed Lambda code to reference this bucket.
-   
-7. Go to the S3 console, open the created bucket, enable static website hosting, and configure access policies to allow public access.
-   
-9. After Step 2.4, a folder named District will appear in the project directory. Upload its contents to the S3 bucket and retrieve the public URL of the project from the properties.
-
----
-
-## Future Improvements
-
-- Add authentication using AWS Cognito.
-- Implement better UI/UX with Tailwind and React Query.
-- Automate deployment using GitHub Actions.
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
-
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+```
