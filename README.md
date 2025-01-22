@@ -2,8 +2,9 @@
 
 AI Story-Based Time Filler is a web application that generates audio files based on user-provided text prompts. It leverages AWS services such as Lambda, S3, Polly, and Bedrock to create and store audio files.
 
-![Screenshot 2025-01-21 at 3 51 21 PM](https://github.com/user-attachments/assets/1f941e16-abfc-48e0-93db-bf925c50439e)
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1f941e16-abfc-48e0-93db-bf925c50439e" alt="Screenshot 2025-01-21 at 3 51 21 PM">
+</p>
 
 ## Features
 
@@ -45,12 +46,7 @@ Ensure you have the following installed and configured:
    ```bash
    git clone https://github.com/Ramil-code/ai-story
    ```
-2. Create a new folder and add your Lambda code (e.g., `app.py`).
-2. Zip the contents of the folder:
-   ```bash
-   zip -r app.pyzip .
-   ```
-3. Upload the ZIP file to an S3 bucket:
+3. Upload the Lambda ZIP file to an S3 bucket:
    ```bash
    aws s3 cp app.py.zip s3://your-bucket-name/app.py.zip
    ```
