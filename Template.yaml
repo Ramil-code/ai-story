@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  Backend for AI Story-Based Time Filler using HTTP API
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.9
+    Environment:
+      Variables:
+        S3_BUCKET: !Ref AudioBucket
+
+Resources:
+  # S3 Bucket to store generated audio files
+  AudioBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-audio-files"
+      AccessControl: Private
+
+  # IAM Role for Lambda function
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: "AllowBedrockAndPollyAndS3Access"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: "AllowBedrockInvoke"
+                Effect: "Allow"
+                Action:
+                  - "bedrock:InvokeModel"
+                  - "bedrock:InvokeModelWithResponseStream"
+                Resource: "*"
+
+              - Sid: "AllowPollySynthesis"
+                Effect: "Allow"
+                Action:
+                  - "polly:SynthesizeSpeech"
+                Resource: "*"
+
+              - Sid: "AllowS3AudioAccess"
+                Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                  - "s3:GetObject"
+                  - "s3:GetBucketLocation"
+                Resource:
+                  - !Sub "arn:aws:s3:::${AudioBucket}"
+                  - !Sub "arn:aws:s3:::${AudioBucket}/*"
+
+  # HTTP API Gateway to expose the Lambda function
+  AudioApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: Prod
+      CorsConfiguration:
+        AllowMethods: 
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders: 
+          - Content-Type
+          - Authorization
+        AllowOrigins: 
+          - "*"
+
+  # Lambda function to handle audio generation
+  AudioGeneratorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: REPLACE
+      Handler: app.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AudioApi
+            Path: /generate
+            Method: post
+
+Outputs:
+  ApiUrl:
+    Description: "HTTP API Gateway endpoint URL for POST requests"
+    Value: !Sub "https://${AudioApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate"
+
+  S3BucketName:
+    Description: "S3 bucket name for storing audio files"
+    Value: !Ref AudioBucket
