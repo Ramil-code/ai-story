@@ -3,8 +3,12 @@
 AI Story-Based Time Filler is a web application that generates audio files based on user-provided text prompts. It leverages AWS services such as Lambda, S3, Polly, and Bedrock to create and store audio files.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/1f941e16-abfc-48e0-93db-bf925c50439e" alt="Screenshot 2025-01-21 at 3 51 21 PM">
+  <img src="https://github.com/user-attachments/assets/337daf46-e64f-45c1-ba79-144901e87e45" 
+       alt="AI story" 
+       width="70%" 
+       height="auto">
 </p>
+
 
 ## Features
 
@@ -12,6 +16,10 @@ AI Story-Based Time Filler is a web application that generates audio files based
 - **Serverless Backend:** AWS Lambda, S3, Polly, Bedrock, and HTTP API Gateway.
 - **Infrastructure-as-Code:** Managed with AWS SAM.
 - **CORS Enabled:** Open access to the API from any frontend.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1f941e16-abfc-48e0-93db-bf925c50439e" alt="Screenshot 2025-01-21 at 3 51 21 PM">
+</p>
 
 ## Prerequisites
 
