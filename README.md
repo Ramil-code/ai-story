@@ -46,11 +46,11 @@ Ensure you have the following installed and configured:
    ```bash
    git clone https://github.com/Ramil-code/ai-story
    ```
-3. Upload the Lambda ZIP file to an S3 bucket:
+3. Upload the  [Lambda ZIP file](https://github.com/Ramil-code/ai-story/blob/1f3c32f405cacb0eecb56c148d75e4e506eb1902/app.py.zip)  to an S3 bucket:
    ```bash
    aws s3 cp app.py.zip s3://your-bucket-name/app.py.zip
    ```
-4. Update the `CodeUri` line in `template.yaml` to reflect the new S3 location:
+4. Update the `CodeUri` line in [`template.yaml`](https://github.com/Ramil-code/ai-story/blob/main/Template.yaml) to reflect the new S3 location:
    ```yaml
    CodeUri: s3://your-bucket-name/app.py.zip
    ```
@@ -88,7 +88,7 @@ Ensure you have the following installed and configured:
    npm install
    ```
 
-3. Update the `REPLACE BY YOUR API` line in `AudioGenerator.txs` with endpoint link (Step 1.3)
+3. Update the `REPLACE BY YOUR API` line in [`AudioGenerator.txs`](https://github.com/Ramil-code/ai-story/blob/main/src/components/AudioGenerator.tsx) with endpoint link from Step 1.3
 
 4. Run the frontend locally:
    ```bash
@@ -96,9 +96,9 @@ Ensure you have the following installed and configured:
    ```
 5. AWS SAM creates an S3 bucket named `{AWS::StackName}-audio-files`. Update the deployed Lambda code to reference this bucket.
    
-7. Go to the S3 console, open the created bucket, enable static website hosting, and configure access policies to allow public access.
+7. Go to the S3 console, open the created bucket, enable static website hosting, and configure [access policies](https://github.com/Ramil-code/ai-story/blob/main/s3_policy) to allow public access.
    
-9. After Step 2.4, a folder named District will appear in the project directory. Upload its contents to the S3 bucket and retrieve the public URL of the project from the properties.
+9. After Step 2.4, a folder named "dist" will appear in the project directory. Upload its contents to the S3 bucket and retrieve the public URL of the project from the bucket properties.
 
 ---
 
